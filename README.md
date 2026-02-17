@@ -19,7 +19,7 @@ Se desplegó una API en **FastAPI** dentro de un clúster **Kubernetes (Minikube
 
 ---
 
-#🗂️ Estructura del proyecto
+# 🗂️ Estructura del proyecto
 
 ```text
 sistemas-distribuidos/
@@ -36,24 +36,7 @@ sistemas-distribuidos/
 
 ---
 
-#🚀 Ejecución paso a paso
-1) Iniciar Minikube
-minikube start --driver=docker
-
-2) Construir imagen dentro de Minikube
-eval $(minikube docker-env)
-docker build -t fastapi-app:latest .
-
-3) Desplegar en Kubernetes
-kubectl apply -f k8s/
-
-4) Verificar recursos
-kubectl get pods -o wide
-kubectl get svc
-
-5) Obtener URL del servicio
-minikube service fastapi-service --url
-🚀 Ejecución paso a paso
+# 🚀 Ejecución paso a paso
 1) Iniciar Minikube
 minikube start --driver=docker
 
@@ -74,7 +57,7 @@ minikube service fastapi-service --url
 ---
 
 
-#🧪 Evidencia de distribución (hostnames)
+# 🧪 Evidencia de distribución (hostnames)
 
 Cada petición puede ser atendida por un pod diferente.
 El endpoint devuelve el hostname para evidenciar balanceo/distribución.
@@ -89,7 +72,7 @@ Ejemplo de salida esperada:
 
 ---
 
-#♻️ Self-healing (opcional)
+# ♻️ Self-healing (opcional)
 
 Kubernetes recrea pods automáticamente si alguno falla:
 
@@ -99,7 +82,7 @@ kubectl get pods
 
 ---
 
-#📈 Escalabilidad (opcional)
+# 📈 Escalabilidad (opcional)
 
 Escalar el número de réplicas:
 
@@ -108,11 +91,11 @@ kubectl get pods
 
 ---
 
-#🧹 Limpieza
+# 🧹 Limpieza
 kubectl delete -f k8s/
 
 ---
 
-#👤 Autor
+# 👤 Autor
 
 GitHub: YORYI777
