@@ -22,9 +22,9 @@ Se desplegó una API en **FastAPI** dentro de un clúster **Kubernetes (Minikube
 
 ---
 
-## 🗂️ Estructura del proyecto
+## 🗂️ Estructura del proyectoo
 
-bash
+```bash
 sistemas-distribuidos/
 ├── app/
 │   └── main.py
