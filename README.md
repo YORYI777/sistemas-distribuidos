@@ -5,7 +5,7 @@
 Proyecto local para la materia de **Sistemas Distribuidos**.  
 Se desplegó una API en **FastAPI** dentro de un clúster **Kubernetes (Minikube)** usando **múltiples réplicas (pods)** y un **Service NodePort** para exponer la app.
 
----
+
 
 
 ---
@@ -36,16 +36,18 @@ sistemas-distribuidos/
 ├── Dockerfile
 ├── requirements.txt
 └── README.md
+---
 
-#✅ Requisitos
+##✅ Requisitos
 
     Docker
 
     Minikube
 
     kubectl
+---
 
-#🚀 Ejecución paso a paso
+##🚀 Ejecución paso a paso
 1) Iniciar Minikube
 
 minikube start --driver=docker
@@ -67,8 +69,9 @@ kubectl get svc
 5) Obtener URL del servicio
 
 minikube service fastapi-service --url
+---
 
-#🧪 Evidencia de distribución (hostnames)
+##🧪 Evidencia de distribución (hostnames)
 
 Cada petición puede ser atendida por un pod diferente.
 El endpoint devuelve el hostname para evidenciar balanceo/distribución.
@@ -79,11 +82,13 @@ Ejemplo de salida esperada:
 
 {"mensaje":"Sistema Distribuido funcionando","hostname":"fastapi-app-xxxxx"}
 {"mensaje":"Sistema Distribuido funcionando","hostname":"fastapi-app-yyyyy"}
+---
 
-#🧹 Limpieza
+##🧹 Limpieza
 
 kubectl delete -f k8s/
+---
 
-#👤 Autor
+##👤 Autor
 
     GitHub: YORYI777
