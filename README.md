@@ -1,27 +1,33 @@
-# 🚀Sistema Distribuido con FastAPI + Kubernetes (Minikube)
 
-![Arquitectura del sistema](assets/arquitectura.png)
 
-Proyecto local para la materia de **Sistemas Distribuidos**.
-Se desplegó una API en **FastAPI** dentro de un clúster **Kubernetes (Minikube)** usando múltiples réplicas (pods) y un **Service NodePort** para exponer la app.
+🚀 Sistema Distribuido con FastAPI + Kubernetes (Minikube)
+
+
+
+Proyecto desarrollado para la materia de Sistemas Distribuidos.
+Se implementó una arquitectura distribuida desplegando una API en FastAPI dentro de un clúster local Kubernetes (Minikube), con múltiples réplicas (pods), balanceo de carga, cache y persistencia.
+
 
 ---
 
-## 📦 Componentes del sistema
+📦 Componentes del sistema
 
-| Componente | Función |
-|----------|---------|
-| FastAPI + Uvicorn | API HTTP que responde con el hostname del pod |
-| Redis | Cache / contador de visitas (/hits) |
-| PostgreSQL | Persistencia (base de datos) |
-| Nginx | Balanceador/Proxy hacia la API (entrada del sistema) |
-| Docker | Empaquetado de la app en una imagen |
-| Kubernetes (Minikube) | Orquestación local y administración de pods |
-| Deployment | Mantiene varias réplicas (3 pods) |
-| Service | Expone servicios y permite comunicación entre pods |
+Componente	Función
+
+FastAPI + Uvicorn	API HTTP que responde con el hostname del pod
+Redis	Cache y contador de visitas (/hits)
+PostgreSQL	Persistencia de datos
+Nginx	Balanceador / Proxy de entrada al sistema
+Docker	Empaquetado de la aplicación
+Kubernetes (Minikube)	Orquestación y administración de pods
+Deployment	Mantiene múltiples réplicas (3 pods)
+Service	Comunicación interna y exposición externa
+
+
+
 ---
 
-## 🗂️ Estructura del proyecto
+🗂️ Estructura del proyecto
 
 sistemas-distribuidos/
 ├── app/
@@ -32,38 +38,47 @@ sistemas-distribuidos/
 │   ├── redis.yaml
 │   ├── postgres.yaml
 │   ├── nginx.yaml
-│   └── nginx-config.yaml   # (si lo tienes)
+│   └── nginx-config.yaml
 ├── assets/
 │   └── arquitectura.png
 ├── Dockerfile
 ├── requirements.txt
 └── README.md
+
+
 ---
 
-# 🚀 Ejecución paso a paso
-1) Iniciar Minikube
+🚀 Ejecución paso a paso
+
+1️⃣ Iniciar Minikube
+
 minikube start --driver=docker
 
-2) Construir imagen dentro de Minikube
+2️⃣ Construir imagen dentro de Minikube
+
 eval $(minikube docker-env)
 docker build -t fastapi-app:latest .
 
-3) Desplegar en Kubernetes
+3️⃣ Desplegar en Kubernetes
+
 kubectl apply -f k8s/
 
-4) Verificar recursos
+4️⃣ Verificar recursos
+
 kubectl get pods -o wide
 kubectl get svc
 
-5) Obtener URL del servicio
+5️⃣ Obtener URL del servicio
+
 minikube service nginx --url
+
+
 ---
 
-
-# 🧪 Evidencia de distribución (hostnames)
+🧪 Evidencia de Distribución (Balanceo de Carga)
 
 Cada petición puede ser atendida por un pod diferente.
-El endpoint devuelve el hostname para evidenciar balanceo/distribución.
+El endpoint devuelve el hostname para evidenciar la distribución.
 
 URL=$(minikube service nginx --url)
 for i in {1..10}; do curl -s $URL/; echo; done
@@ -73,32 +88,86 @@ Ejemplo de salida esperada:
 {"mensaje":"Sistema Distribuido funcionando","hostname":"fastapi-app-xxxxx"}
 {"mensaje":"Sistema Distribuido funcionando","hostname":"fastapi-app-yyyyy"}
 
----
+Esto demuestra que Kubernetes distribuye las solicitudes entre múltiples pods.
 
-# ♻️ Self-healing (opcional)
-
-Kubernetes recrea pods automáticamente si alguno falla:
-
-kubectl get pods
-kubectl delete pod <NOMBRE_DEL_POD>
-kubectl get pods
 
 ---
 
-# 📈 Escalabilidad (opcional)
+🛡️ Pruebas de Resiliencia
 
-Escalar el número de réplicas:
+Estas pruebas validan la tolerancia a fallos y la auto-recuperación del sistema.
+
+
+---
+
+🔧 Simular caída de un Pod (Self-Healing)
+
+Eliminar un pod manualmente:
+
+kubectl delete pod -l app=nginx
+
+Kubernetes recreará automáticamente el pod gracias al Deployment.
+
+Monitorear recreación:
+
+kubectl get pods -l app=nginx -w
+
+El servicio continúa funcionando sin interrupciones.
+
+
+---
+
+📈 Escalabilidad Horizontal
+
+Escalar la API a 5 réplicas:
 
 kubectl scale deployment fastapi-app --replicas=5
 kubectl get pods
 
+Reducir nuevamente:
+
+kubectl scale deployment fastapi-app --replicas=3
+
+
 ---
 
-# 🧹 Limpieza
+❌ No recomendado: eliminar el Service
+
+kubectl delete svc nginx
+
+Esto elimina el punto de entrada del sistema y la URL pública dejará de funcionar.
+
+
+---
+
+🧹 Limpieza del entorno
+
 kubectl delete -f k8s/
 
+
 ---
 
-# 👤 Autor
+🎯 Características del sistema
 
-GitHub: YORYI777
+✔ Balanceo de carga
+
+✔ Escalabilidad horizontal
+
+✔ Auto-recuperación (Self-healing)
+
+✔ Persistencia con PostgreSQL
+
+✔ Cache con Redis
+
+✔ Arquitectura distribuida real
+
+
+
+---
+
+👤 Autor
+
+GitHub: https://github.com/YORYI777
+
+
+
