@@ -7,33 +7,37 @@ Se desplegó una API en **FastAPI** dentro de un clúster **Kubernetes (Minikube
 
 ---
 
-#📦Componentes del sistema
+## 📦 Componentes del sistema
 
 | Componente | Función |
-|---|---|
-| FastAPI + Uvicorn | API HTTP que responde con el `hostname` del pod |
+|----------|---------|
+| FastAPI + Uvicorn | API HTTP que responde con el hostname del pod |
+| Redis | Cache / contador de visitas (/hits) |
+| PostgreSQL | Persistencia (base de datos) |
+| Nginx | Balanceador/Proxy hacia la API (entrada del sistema) |
 | Docker | Empaquetado de la app en una imagen |
 | Kubernetes (Minikube) | Orquestación local y administración de pods |
 | Deployment | Mantiene varias réplicas (3 pods) |
-| Service (NodePort) | Expone la app y distribuye el tráfico entre pods |
-
+| Service | Expone servicios y permite comunicación entre pods |
 ---
 
-# 🗂️ Estructura del proyecto
+## 🗂️ Estructura del proyecto
 
-```text
 sistemas-distribuidos/
 ├── app/
 │   └── main.py
 ├── k8s/
 │   ├── app-deployment.yaml
-│   └── app-service.yaml
+│   ├── app-service.yaml
+│   ├── redis.yaml
+│   ├── postgres.yaml
+│   ├── nginx.yaml
+│   └── nginx-config.yaml   # (si lo tienes)
 ├── assets/
 │   └── arquitectura.png
 ├── Dockerfile
 ├── requirements.txt
-└── README.md```
-
+└── README.md
 ---
 
 # 🚀 Ejecución paso a paso
@@ -52,8 +56,7 @@ kubectl get pods -o wide
 kubectl get svc
 
 5) Obtener URL del servicio
-minikube service fastapi-service --url
-
+minikube service nginx --url
 ---
 
 
@@ -62,8 +65,8 @@ minikube service fastapi-service --url
 Cada petición puede ser atendida por un pod diferente.
 El endpoint devuelve el hostname para evidenciar balanceo/distribución.
 
-for i in {1..10}; do curl -s http://$(minikube ip):30007/; echo; done
-
+URL=$(minikube service nginx --url)
+for i in {1..10}; do curl -s $URL/; echo; done
 
 Ejemplo de salida esperada:
 
